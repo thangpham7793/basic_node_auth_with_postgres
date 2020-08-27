@@ -1,0 +1,19 @@
+#https://medium.com/analytics-vidhya/getting-started-with-postgresql-using-docker-compose-34d6b808c47c
+
+version: "3.2"
+services:
+  db:
+    image: postgres
+    env_file:
+      - .env
+    volumes:
+      # bind container's folder onto a host's folder
+      - type: bind
+        source: ./testdata
+        target: /tmp/testdata
+      - db-data:/var/lib/postgresql/data/ #persist data inside the container
+    ports:
+      - "5432:5432" #sudo lsof -i -P -n | grep <port number> sudo kill ...
+
+volumes:
+  db-data:
