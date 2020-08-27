@@ -31,6 +31,25 @@ class UserAccount {
     }
   }
 
+  async getUser(email, username) {
+    let statement, params
+    //logs in with username
+    if (!email) {
+      statement = `SELECT user_id, password FROM ${this.table} WHERE username = $1;`
+      params = [username]
+    } else {
+      statement = `SELECT user_id, password FROM ${this.table} WHERE email = $1;`
+      params = [email]
+    }
+    //execution
+    const client = await pool.connect()
+    try {
+      return await this.pool.query(statement, params)
+    } finally {
+      client.release()
+    }
+  }
+
   async delete(username) {
     let statement = `DELETE FROM ${this.table} WHERE username = $1;`
     const client = await pool.connect()

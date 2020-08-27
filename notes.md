@@ -12,5 +12,11 @@
 
 ### Todos
 
+[] Why uses JWT (reduce network calls? Hashing is not enough?)
+[] Implement JWT
 [] Set up a test database
 [] Research about where to validate user input?
+
+[x] Set up basic auth with bcrypt
+[x] Set up basic validation in Express App as well as Postgres
+[x] Set up custom error handlers

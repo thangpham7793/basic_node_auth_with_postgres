@@ -27,12 +27,41 @@ const signupPOSTHandler = async (req, res) => {
 const loginGETHandler = (req, res) => {
   res.render('login')
 }
-const loginPOSTHandler = (req, res) => {
+const loginPOSTHandler = async (req, res) => {
   const { email, username, password } = req.body
-  if (isEmail(email)) {
-    res.send(`User attempts to sign in with ${JSON.stringify(req.body)}`)
+
+  //missing params should be handled by the client side though
+  if (!email && !username) {
+    customErrors(email, 'Missing Email or Username')
+    //if there's email
+  } else if (!username) {
+    if (!isEmail(email)) {
+      customErrors(email, 'Invalid email')
+    }
+  }
+  //get credentials from db
+  const result = await user.getUser(email, username)
+
+  //NOTE: the result object is still returned even if no rows are found
+  if (!result.rows[0]) {
+    console.log('No result found!')
+    if (username) {
+      customErrors(username, 'Unknown username!')
+    }
+    customErrors(email, 'Unknown email!')
+    return
+  }
+
+  //compare hashedPw with received pw
+  const requestedUserInfo = result.rows[0]
+  const matched = await bcrypt.compare(password, requestedUserInfo.password)
+
+  //probably send JWT to user here
+  if (matched) {
+    res.status(200).send({ message: 'Correct Credentials. You are logged in!' })
+    //wrong password
   } else {
-    customErrors(email, 'Invalid email')
+    res.status(401).send({ message: 'Invalid Password!' })
   }
 }
 
