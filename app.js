@@ -1,21 +1,18 @@
-const express = require("express");
-require("express-async-errors");
-const config = require("./utils/config");
-const app = express();
-const authRoutes = require("./routes/authRoutes");
-const errorHandler = require("./utils/errorHandler");
+const express = require('express')
+require('express-async-errors')
+const app = express()
+const authRoutes = require('./routes/authRoutes')
+const errorHandler = require('./utils/errorHandler')
 // middleware
-app.use(express.static("public"));
-app.use(express.json());
+app.use(express.static('public'))
+app.use(express.json())
 // view engine
-app.set("view engine", "ejs");
-
-app.listen(config.PORT, () => {
-  console.log(`Listening on PORT ${config.PORT}`);
-});
+app.set('view engine', 'ejs')
 
 // routes
-app.get("/", (req, res) => res.render("home"));
-app.get("/smoothies", (req, res) => res.render("smoothies"));
-app.use(authRoutes);
-app.use(errorHandler);
+app.get('/', (req, res) => res.render('home'))
+app.get('/smoothies', (req, res) => res.render('smoothies'))
+app.use(authRoutes)
+app.use(errorHandler)
+
+module.exports = app

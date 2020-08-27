@@ -8,3 +8,9 @@
 
 1. Add constraint using DB functionalities
 2. Consider templating
+3. Serial type always increases since sequence type cannot be rolled back and it's okay
+
+### Todos
+
+[] Set up a test database
+[] Research about where to validate user input?
