@@ -22,7 +22,7 @@ class UserAccount {
   }
 
   async signup(email, username, password) {
-    let statement = `INSERT INTO ${this.table} (email, username, password) VALUES ($1, $2, $3) RETURNING *` //similar to mongoose
+    let statement = `INSERT INTO ${this.table} (email, username, password) VALUES ($1, $2, $3) RETURNING user_id` //similar to mongoose
     const client = await pool.connect()
     try {
       return await this.pool.query(statement, [email, username, password])

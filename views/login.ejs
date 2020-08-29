@@ -1,5 +1,53 @@
 <%- include('partials/header'); -%>
 
-<h1>log in</h1>
+<form action="/signup">
+  <h2>Login</h2>
+  <label for="emailOrUsername">Email or Username</label>
+  <input type="text" name="emailOrUsername" required />
+  <div class="emailOrUsername error"></div>
+  <label for="password">Password</label>
+  <input type="password" name="password" required />
+  <div class="password error"></div>
+  <button>Log In</button>
+</form>
 
 <%- include('partials/footer'); -%>
+
+<script>
+  const form = document.querySelector('form')
+  form.addEventListener('submit', async (e) => {
+    e.preventDefault()
+    // get values
+    const emailOrUsername = form.emailOrUsername.value
+    const password = form.password.value
+    console.log(emailOrUsername, password)
+
+    let payload
+    //basic check to determine if the user uses email or username to log in
+    if (emailOrUsername.indexOf('@') > -1) {
+      payload = {
+        email: emailOrUsername,
+        password,
+      }
+    } else {
+      payload = {
+        username: emailOrUsername,
+        password,
+      }
+    }
+    let res
+    //first time logging in
+    try {
+      res = await fetch('/login', {
+        method: 'POST',
+        body: JSON.stringify(payload),
+        headers: { 'Content-Type': 'application/json' },
+      })
+      //need to await the parsing of returned data as well
+      const user_id = await res.json()
+      console.log(res)
+    } catch (error) {
+      console.log(`Error: ${error}`)
+    }
+  })
+</script>
